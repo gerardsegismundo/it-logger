@@ -1,40 +1,25 @@
-import React, { useState } from 'react'
-import { connect } from 'react-redux'
-import { addLog } from '../../actions/logActions'
-import PropTypes from 'prop-types'
+import React, { useState /* , useEffect */ } from 'react'
+
 import M from 'materialize-css/dist/js/materialize.min.js'
 
-const AddLogModal = ({ addLog }) => {
+const EditLogModal = () => {
   const [message, setMessage] = useState('')
   const [attention, setAttention] = useState(false)
   const [tech, setTech] = useState('')
 
-  const clearFields = () => {
-    setMessage('')
-    setTech('')
-    setAttention(false)
-  }
   const onSubmit = () => {
     if (message === '' || tech === '') {
-      return M.toast({ html: 'Please enter a message and tech' })
+      M.toast({ html: 'Please enter a message and tech' })
+    } else {
+      // Clear Fields
+      setMessage('')
+      setTech('')
+      setAttention(false)
     }
-
-    const newLog = {
-      message,
-      attention,
-      tech,
-      date: new Date()
-    }
-
-    addLog(newLog)
-
-    M.toast({ html: `Log added by ${tech}` })
-
-    clearFields()
   }
 
   return (
-    <div id='add-log-modal' className='modal' style={modalStyle}>
+    <div id='edit-log-modal' className='modal' style={modalStyle}>
       <div className='modal-content'>
         <h4>Enter System Log</h4>
         <div className='row'>
@@ -45,9 +30,6 @@ const AddLogModal = ({ addLog }) => {
               value={message}
               onChange={e => setMessage(e.target.value)}
             />
-            <label htmlFor='message' className='active'>
-              Log Message
-            </label>
           </div>
         </div>
 
@@ -68,17 +50,19 @@ const AddLogModal = ({ addLog }) => {
             </select>
           </div>
         </div>
+
         <div className='row'>
           <div className='input-field'>
             <p>
               <label>
                 <input
                   type='checkbox'
+                  className='filled-in'
                   checked={attention}
                   value={attention}
                   onChange={e => setAttention(!attention)}
                 />
-                <span>Needs attention</span>
+                <span>Needs Attention</span>
               </label>
             </p>
           </div>
@@ -97,16 +81,9 @@ const AddLogModal = ({ addLog }) => {
   )
 }
 
-AddLogModal.propTypes = {
-  addLog: PropTypes.func.isRequired
-}
-
 const modalStyle = {
   width: '75%',
   height: '75%'
 }
 
-export default connect(
-  null,
-  { addLog }
-)(AddLogModal)
+export default EditLogModal
